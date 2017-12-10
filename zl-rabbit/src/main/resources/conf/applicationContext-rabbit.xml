@@ -1,0 +1,42 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/rabbit
+           http://www.springframework.org/schema/rabbit/spring-rabbit.xsd
+           http://www.springframework.org/schema/context
+			http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <rabbit:connection-factory id="mqConnectionFactory" host="${mq.host}" username="${mq.uname}" password="${mq.upwd}" port="${mq.port}" />
+
+    <rabbit:template id="amqpTemplate" connection-factory="mqConnectionFactory" message-converter="msgConverter" exchange="kyyz_work" />
+
+    <rabbit:admin connection-factory="mqConnectionFactory" />
+
+	<rabbit:queue name="work_order_queue" durable="true" />
+	<rabbit:queue name="work_driver_queue" durable="true" />
+	
+	<rabbit:direct-exchange name="kyyz_work" durable="true" >
+		<rabbit:bindings>
+			<rabbit:binding queue="work_order_queue" key="work.order" />
+			<rabbit:binding queue="work_driver_queue" key="work.driver" />
+		</rabbit:bindings>
+	</rabbit:direct-exchange>
+    
+    
+	<bean id="msgConverter" class="org.springframework.amqp.support.converter.Jackson2JsonMessageConverter" />
+	
+	<rabbit:annotation-driven  />
+	
+	<bean id="rabbitListenerContainerFactory"
+    class="org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory">
+	    <property name="messageConverter" ref="msgConverter" />
+	    <property name="connectionFactory" ref="mqConnectionFactory" />
+	    <property name="concurrentConsumers" value="1" />
+	    <property name="maxConcurrentConsumers" value="10" />
+	</bean>
+
+	<context:component-scan base-package="org.zl.amqp.listener" />
+	
+</beans>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:task="http://www.springframework.org/schema/task"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:websocket="http://www.springframework.org/schema/websocket"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/task
+		http://www.springframework.org/schema/task/spring-task.xsd  
+		http://www.springframework.org/schema/mvc  
+		http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/websocket
+        http://www.springframework.org/schema/websocket/spring-websocket.xsd">
+
+	<task:annotation-driven executor="myExecutor" scheduler="myScheduler"/>
+	<task:executor id="myExecutor" pool-size="10"/>
+	<task:scheduler id="myScheduler" pool-size="5"/>
+	
+<!-- 	<mvc:interceptors>
+		使用bean定义一个Interceptor，直接定义在mvc:interceptors根下面的Interceptor将拦截所有的请求
+		<bean class="org.zl.web.interceptor.IPValidateInterceptor"/>
+ 		<mvc:interceptor>
+			<mvc:mapping path="/test/number.do"/>
+			定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的
+			<bean class="com.host.app.web.interceptor.LoginInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors> -->
+	
+	<context:property-placeholder location="classpath:conf/config.properties" local-override="true" properties-ref="myConfiguration" />
+	<util:properties id="myConfiguration" location="classpath:config.properties" ignore-resource-not-found="true" />
+		
+	<context:component-scan base-package="org.zl.service">
+		<context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.RestController"/>
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<bean id="messageSource"
+            class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>org.zl.i18n.myweb</value>
+            </list>
+        </property>
+    </bean>
+	
+	<bean id="asyncClientHttpRequestFactory" class="org.springframework.http.client.HttpComponentsAsyncClientHttpRequestFactory"></bean>
+	
+	<bean id="asyncRestTemplate" class="org.springframework.web.client.AsyncRestTemplate">
+		<constructor-arg ref="asyncClientHttpRequestFactory"></constructor-arg>
+	</bean>
+	
+	<bean id="clientHttpRequestFactory" class="org.springframework.http.client.HttpComponentsClientHttpRequestFactory"></bean>
+	
+	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+		<constructor-arg ref="clientHttpRequestFactory"></constructor-arg>
+	</bean>
+</beans>

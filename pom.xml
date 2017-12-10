@@ -1,0 +1,51 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.zl.wechat</groupId>
+  <artifactId>baseweb</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>base web framework</name>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <modules>
+  	<module>zl-commons</module>
+  	<module>baseweb-framework-bom</module>
+  	<module>zl-store</module>
+  	<module>zl-18zh</module>
+  	<module>zl-security</module>
+  	<module>zl-wechat-core</module>
+  	<module>zl-wechat-publicaccounts</module>
+  	<module>zl-wechat-workaccounts</module>
+  	<module>zl-wechat-miniapps</module>
+  	<module>workweb</module>
+  	<module>mpweb</module>
+  	<module>mappweb</module>
+  	<module>zl-rabbit</module>
+  	<module>zl-service</module>
+  </modules>
+  <dependencyManagement>
+  	<dependencies>
+  		<dependency>
+  			<groupId>org.zl.bom</groupId>
+  			<artifactId>baseweb-framework-bom</artifactId>
+  			<version>${project.version}</version>
+  			<type>pom</type>
+  			<scope>import</scope>
+  		</dependency>
+  	</dependencies>
+  </dependencyManagement>
+</project>
