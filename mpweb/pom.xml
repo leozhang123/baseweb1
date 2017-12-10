@@ -61,7 +61,7 @@
 	<build>
 		<finalName>mp</finalName>
 		<plugins>
-			<plugin>
+<!-- 			<plugin>
 				<groupId>com.richfit.maven</groupId>
 				<artifactId>rfddl-maven-plugin</artifactId>
 				<version>0.0.1</version>
@@ -76,7 +76,7 @@
 				<configuration>
 					<outputDirectory>${project.build.directory}/mp/WEB-INF/ddl</outputDirectory>
 				</configuration>
-			</plugin>
+			</plugin> -->
 		</plugins>
 	</build>
 </project>
